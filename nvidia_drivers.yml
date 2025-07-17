@@ -1,0 +1,21 @@
+---
+- name: Install Nvidia drivers
+  hosts: localhost
+  become: true
+  become_user: root
+
+  vars:
+    nvidia_pkgs: ['akmod-nvidia', 'xorg-x11-drv-nvidia-cuda']
+
+  tasks:
+    - name: Update packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+    - name: Reboot
+      ansible.builtin.reboot:
+
+    - name: Install nvidia packages
+      ansible.builtin.dnf:
+        name: "{{ nvidia_pkgs }}"
+        state: present

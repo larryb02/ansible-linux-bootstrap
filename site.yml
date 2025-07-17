@@ -1,0 +1,30 @@
+---
+- name: Bootstrap system
+  hosts: localhost
+  gather_facts: false
+  become: true
+  become_user: root
+
+  vars:
+    pkg_list: []
+
+  tasks:
+    # - name: Add Third Party Repos
+    #   ansible.builtin.debug:
+    #     msg: "Adding tprs!!!"
+
+    - name: Upgrade all packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+
+    - name: Reboot
+      ansible.builtin.reboot:
+
+    - name: Install some packages
+      ansible.builtin.dnf:
+        name: "{{ pkg_list }}"
+        state: present
+
+    - name: Setup nvidia drivers
+      ansible.builtin.import_playbook: nvidia_drivers.yml
